@@ -1,0 +1,37 @@
+<%= form_with model:book,local:true do |f| %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: 'form-control book_title' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :opinion %>
+    <%= f.text_area :body, class: 'form-control book_body' %>
+  </div>
+  <div class="form-group">
+    <%= f.submit class: 'btn btn-success' %>
+  </div>
+
+  <%= form_with model: @book, local: true do |f| %>
+    <!-- その他のフォームフィールド -->
+    <div class="form-group form-group_tags">
+      <%= f.label :tag_list, "Tag", class: "form-label" %>
+      <%= f.text_field :tag_list, value: @book.tag_list.join(","), class: "form-control", data: { role: "tagsinput" } %>
+    </div>
+  <% end %>
+
+  <!-- 現在の評価が存在するか確認 -->
+      <% if @book.score.present? %>
+        <h4>現在の評価</h4>
+        <p>評価: <%= @book.score %> / 5</p>
+        <div class="ratings">
+          <% (1..5).each do |i| %>
+            <%= image_tag(i <= @book.score ? 'star-on.png' : 'star-off.png') %>
+          <% end %>
+        </div>
+      <% else %>
+        <h4>評価</h4>
+        <div id="post_raty"></div>
+        <%= f.hidden_field :score, id: 'rating-score' %> <!-- 隠しフィールドを追加 -->
+      <% end %>
+
+<% end %>
